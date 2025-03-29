@@ -339,23 +339,23 @@ class VirusAI:
         elif self.strat == 2:
             self.dfs()
 
-    def bfs(self):
+        def bfs(self):
         for y in self.inf.keys():
             if self.inf[y] == 1:
-                for x in comp_list[y].connections:
-                    if comp_list[x].occupied != HACKED:
-                        comp_list[x].defence -= comp_list[y].defence
-                        if comp_list[x].defence <= 0:
-                            comp_list[x].defence = abs(comp_list[x].defence)
-                            comp_list[y].defence = comp_list[x].defence // 2
-                            comp_list[x].defence //= 2
-                            self.inf[x] = 1
-                            comp_list[x].occupied = HACKED
-                            comp_list[x].defence += 2
-                        else:
-                            comp_list[y].defence = max(0, comp_list[y].defence - random.randint(2, 5))
-                        arrow_q.append(PopupArrow(comp_list[y].x, comp_list[y].y, comp_list[x].x, comp_list[x].y, RED))
-                        return y, x
+                atkl = comp_list[y].get_uninfected()
+                x = atkl[random.randint(0, len(atkl)-1)]
+                comp_list[x].defence -= comp_list[y].defence
+                if comp_list[x].defence <= 0:
+                    comp_list[x].defence = abs(comp_list[x].defence)
+                    comp_list[y].defence = comp_list[x].defence // 2
+                    comp_list[x].defence //= 2
+                    self.inf[x] = 1
+                    comp_list[x].occupied = HACKED
+                    comp_list[x].defence += 2
+                else:
+                    comp_list[y].defence = max(0, comp_list[y].defence - random.randint(2, 5))
+                    arrow_q.append(PopupArrow(comp_list[y].x, comp_list[y].y, comp_list[x].x, comp_list[x].y, RED))
+                return y, x
 
     # noinspection PyUnboundLocalVariable
     def dfs(self):
