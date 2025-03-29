@@ -361,12 +361,13 @@ class VirusAI:
     def dfs(self):
         for y in self.inf.keys():
             if self.inf[y] == 1:
-                for x in comp_list[y].connections:
-                    if comp_list[x].occupied != HACKED:
-                        max_x = x
-        comp_list[max_x].defence -= comp_list[y].defence
-        comp_list[y].defence = 1
-        arrow_q.append(PopupArrow(comp_list[y].x, comp_list[y].y, comp_list[max_x].x, comp_list[max_x].y, RED))
+                atkl = comp_list[y].get_uninfected()
+                if len(atkl) != 0:
+                    max_x = atkl[random.randint(0, len(atkl)-1)]
+                    max_y = y
+        comp_list[max_x].defence -= comp_list[max_y].defence
+        comp_list[max_y].defence //= 2
+        arrow_q.append(PopupArrow(comp_list[max_y].x, comp_list[max_y].y, comp_list[max_x].x, comp_list[max_x].y, RED))
         if comp_list[max_x].defence <= 0:
             self.inf[max_x] = 1
             comp_list[max_x].occupied = HACKED
